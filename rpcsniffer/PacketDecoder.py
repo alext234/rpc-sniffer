@@ -1,5 +1,6 @@
 from scapy.all import *
 import json
+import logging
 
 class PacketDecoder:
 	def __init__(self):
@@ -16,7 +17,7 @@ class PacketDecoder:
 			return defaultReturn 
 		try:
 			payload = bytes(packet[TCP].payload).decode()
-		except UnicodeDecodeError:
+		except UnicodeDecodeError as e:
 			return defaultReturn
 		
 		isHttp = payload.startswith("POST / HTTP") or \
@@ -36,8 +37,15 @@ class PacketDecoder:
 		if isHttp:
 			jsonString = self.extractJsonString(payload)
 			if jsonString is not None:
-				jsonObject = json.loads(jsonString)
-				return jsonObject
+				try:
+					jsonObject = json.loads(jsonString)
+					return jsonObject
+				except json.decoder.JSONDecodeError as e:
+					logging.error(str(e))
+					logging.error("packet dump: ")
+					packet.show()
+				
+					return None
 		return None
 	
 		

@@ -21,6 +21,6 @@ class OutputFormatter:
 			return str(jsonObject['id']).ljust(Config.ID_SIZE) + \
 			' '.ljust(Config.METHOD_SIZE) + \
 			' '.ljust(Config.PARAMS_SIZE) + \
-			jsonObject['result'].ljust(Config.RESULT_SIZE)
+			str(jsonObject['result']).ljust(Config.RESULT_SIZE)
 					
 		return ''
