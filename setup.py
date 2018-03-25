@@ -22,7 +22,7 @@ VERSION = None
 
 # What packages are required for this module to be executed?
 REQUIRED = ['scapy-python3']
-
+SCRIPTS=['rpcsniffer.py']
 # The rest you shouldn't have to touch too much :)
 # ------------------------------------------------
 # Except, perhaps the License and Trove Classifiers!
@@ -92,6 +92,7 @@ setup(
     python_requires=REQUIRES_PYTHON,
     url=URL,
     packages=find_packages(exclude=('tests',)),
+    scripts=SCRIPTS,
     # If your package is a single module, use this instead of 'packages':
     # py_modules=['mypackage'],
 
