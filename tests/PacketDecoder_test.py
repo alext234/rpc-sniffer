@@ -1,5 +1,8 @@
 import unittest
 import os 
+import logging
+# hide some warning message from scaopy at startup
+logging.getLogger("scapy.runtime").setLevel(logging.ERROR)
 from scapy.all import *
 from rpcsniffer.PacketDecoder import *
 
@@ -15,9 +18,32 @@ class PackerDecoderTestCase(unittest.TestCase):
 
 	def test_HttpPackets(self):
 		"""
-		Test that PacketDecoder should be able to parse HTTP packets
+		PacketDecoder should be able to parse HTTP packets
 		"""
 		packets = rdpcap(self.dataDir + '/web3_clientVersion.pcap')
 
+		numDecodedHttpPackets = 0
 		for packet in packets:
-			self.packetDecoder (packet)
+			if self.packetDecoder(packet) is not None:
+				numDecodedHttpPackets +=1
+		
+		self.assertEqual(numDecodedHttpPackets, 2)
+			
+	
+	def test_methodCallRequest(self):
+		"""
+		PacketDecoder should decode correctly the json fields of a method call request
+		"""
+		packets = rdpcap(self.dataDir + '/web3_clientVersion_method_call.pcap')
+		# TODO
+		pass
+
+
+	def test_methodCallResults(self):
+		"""
+		PacketDecoder should decode correctly the json fields of a method call response
+		"""
+		packets = rdpcap(self.dataDir + '/web3_clientVersion_result.pcap')
+		# TODO
+		pass
+		
