@@ -16,9 +16,22 @@ class PackerDecoderTestCase(unittest.TestCase):
 		pass
 	
 
-	def test_HttpPackets(self):
+	def test_HttpPacketsNoJson(self):
 		"""
-		PacketDecoder should be able to parse HTTP packets
+		PacketDecoder should return None for HTTP packets without Json data
+		"""
+		packets = rdpcap(self.dataDir + '/http_no_json.pcap')
+		numDecodedHttpPackets = 0
+		for packet in packets:
+			if self.packetDecoder(packet) is not None:
+				numDecodedHttpPackets +=1
+		
+		self.assertEqual(numDecodedHttpPackets, 0)
+
+
+	def test_HttpPacketsWithJson(self):
+		"""
+		PacketDecoder should be able to parse HTTP packets with Json data
 		"""
 		packets = rdpcap(self.dataDir + '/web3_clientVersion.pcap')
 

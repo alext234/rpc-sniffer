@@ -10,11 +10,15 @@ class PacketDecoder:
 		"""
 		returns (isHttp, httpPayload)
 		"""
+		defaultReturn = (False, None)
 		
 		if not packet.haslayer(TCP):
-			return False, None
+			return defaultReturn 
+		try:
+			payload = bytes(packet[TCP].payload).decode()
+		except UnicodeDecodeError:
+			return defaultReturn
 		
-		payload = bytes(packet[TCP].payload).decode()
 		isHttp = payload.startswith("POST / HTTP") or \
 			payload.startswith("HTTP")
 		return isHttp, payload
@@ -22,6 +26,8 @@ class PacketDecoder:
 
 	def extractJsonString(self, httpPayload):
 		startPos=httpPayload.find("{")
+		if startPos==-1:
+			return None
 		return httpPayload[startPos:]
 
 
@@ -29,8 +35,9 @@ class PacketDecoder:
 		isHttp, payload=self.isHttp(packet)
 		if isHttp:
 			jsonString = self.extractJsonString(payload)
-			jsonObject = json.loads(jsonString)
-			return jsonObject
+			if jsonString is not None:
+				jsonObject = json.loads(jsonString)
+				return jsonObject
 		return None
 	
 		
