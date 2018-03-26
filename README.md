@@ -12,7 +12,7 @@ This might be useful in the following scenarios:
 # Installation
 
 The following assumes you already have Python virtualenv activated. 
-If not you may need to add `sudo`  in front of the setup.py command and the pip command.
+If not you may need to add `sudo`  in front of the setup.py command.
 
 - Via the `setup.py` script
 
